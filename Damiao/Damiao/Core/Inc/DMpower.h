@@ -3,7 +3,7 @@
 
 #include "DMpower.h"
 #include "stm32f4xx_hal.h"
-#define MOTOR1  0x01   //1电机ID
+#define MOTOR1  0x201   //1电机ID
 #define MOTOR2  0x02   //2电机ID
 #define MOTOR3  0x03   //3电机ID
 #define P_MIN   -12.5  //位置最小值

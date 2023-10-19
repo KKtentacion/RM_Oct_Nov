@@ -20,7 +20,6 @@
 #include "main.h"
 #include "can.h"
 #include "gpio.h"
-#include "DMpower.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,7 +56,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void MIT_CtrlMotor(CAN_HandleTypeDef* hcan,uint16_t ID, float _pos, float _vel,float _KP, float _KD, float _torq);
-void Enable_CtrlMotor(CAN_HandleTypeDef* hcan,uint8_t id, uint8_t data0, uint8_t data1,uint8_t data2, uint8_t data3, uint8_t data4,uint8_t data5,uint8_t data6,uint8_t data7);
+void Enable_CtrlMotor(CAN_HandleTypeDef* hcan,uint16_t id, uint8_t data0, uint8_t data1,uint8_t data2, uint8_t data3, uint8_t data4,uint8_t data5,uint8_t data6,uint8_t data7);
 void Speed_CtrlMotor(CAN_HandleTypeDef* hcan, uint16_t ID, float _vel);
 void can_filter_init(void);
 extern CAN_HandleTypeDef hcan1;
@@ -92,11 +91,12 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CAN2_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
   can_filter_init();
   HAL_GPIO_WritePin(GPIOH,GPIO_PIN_12,GPIO_PIN_SET);
   HAL_Delay(1000);
-  Enable_CtrlMotor(&hcan2,MOTOR1, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC);
+  //Enable_CtrlMotor(&hcan2,MOTOR1, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,7 +106,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    Speed_CtrlMotor(&hcan2, 0x201, 1000);
+    Enable_CtrlMotor(&hcan1,0X101, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC);
+    Speed_CtrlMotor(&hcan1, 0x101, 10);
   }
   /* USER CODE END 3 */
 }
@@ -133,7 +134,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 6;
-  RCC_OscInitStruct.PLL.PLLN = 84;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -147,10 +148,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }

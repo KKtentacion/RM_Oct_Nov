@@ -31,5 +31,3 @@ damiao\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 damiao\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 damiao\main.o: ../Core/Inc/can.h
 damiao\main.o: ../Core/Inc/gpio.h
-damiao\main.o: ../Core/Inc/DMpower.h
-damiao\main.o: ../Core/Inc/DMpower.h
