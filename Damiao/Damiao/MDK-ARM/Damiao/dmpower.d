@@ -29,5 +29,5 @@ damiao\dmpower.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 damiao\dmpower.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 damiao\dmpower.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 damiao\dmpower.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-damiao\dmpower.o: ../Core/Inc/DMpower.h
-damiao\dmpower.o: ../Core/Inc/DMpower.h
+damiao\dmpower.o: ../Core/Inc/DMPower.h
+damiao\dmpower.o: ../Core/Inc/DMPower.h

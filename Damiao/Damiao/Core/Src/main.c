@@ -106,8 +106,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    Enable_CtrlMotor(&hcan1,0X101, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC);
-    Speed_CtrlMotor(&hcan1, 0x101, 10);
+    Enable_CtrlMotor(&hcan1,0X201, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC);
+    Speed_CtrlMotor(&hcan1, 0x201, 100000);
   }
   /* USER CODE END 3 */
 }

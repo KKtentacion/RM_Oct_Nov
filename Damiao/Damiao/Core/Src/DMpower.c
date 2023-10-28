@@ -1,8 +1,8 @@
 #include "main.h"
-#include "DMpower.h"
+#include "DMPower.h"
 
-extern CAN_HandleTypeDef hcan2;
 extern CAN_HandleTypeDef hcan1;
+extern CAN_HandleTypeDef hcan2;
 Motor_t MOTOR1_t,MOTOR2_t,MOTOR3_t;
 
 /**
@@ -153,14 +153,13 @@ void Speed_CtrlMotor(CAN_HandleTypeDef* hcan, uint16_t ID, float _vel)
  * @param  ID     数据帧的ID      
  * @param  data   命令帧
  */
- void Enable_CtrlMotor(CAN_HandleTypeDef* hcan,uint16_t ID, uint8_t data0, uint8_t data1,uint8_t data2, uint8_t data3, uint8_t data4,uint8_t data5,uint8_t data6,uint8_t data7)
+ void Enable_CtrlMotor(CAN_HandleTypeDef* hcan,uint8_t ID, uint8_t data0, uint8_t data1,uint8_t data2, uint8_t data3, uint8_t data4,uint8_t data5,uint8_t data6,uint8_t data7)
  {
     static CAN_TxPacketTypeDef packet;
     
     packet.hdr.StdId = ID;
-    packet.hdr.IDE = 0;
-    packet.hdr.RTR = 0;
-	  packet.hdr.ExtId =0;
+    packet.hdr.IDE = CAN_ID_STD;
+    packet.hdr.RTR = CAN_RTR_DATA;
     packet.hdr.DLC = 0x08;
     packet.payload[0] = (uint8_t)data0;
     packet.payload[1] = (uint8_t)data1;
@@ -172,11 +171,11 @@ void Speed_CtrlMotor(CAN_HandleTypeDef* hcan, uint16_t ID, float _vel)
     packet.payload[7] = (uint8_t)data7;
 
     /*找到空的发送邮箱，把数据发送出去*/
-	  if(HAL_CAN_AddTxMessage(&hcan1, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX0) != HAL_OK) //
+	  if(HAL_CAN_AddTxMessage(hcan, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX0) != HAL_OK) //
 	  {
-		if(HAL_CAN_AddTxMessage(&hcan1, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX1) != HAL_OK)
+		if(HAL_CAN_AddTxMessage(hcan, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX1) != HAL_OK)
 		{
-			HAL_CAN_AddTxMessage(&hcan1, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX2);
+			HAL_CAN_AddTxMessage(hcan, &packet.hdr, packet.payload, (uint32_t*)CAN_TX_MAILBOX2);
 		}
 	}
 }
@@ -189,7 +188,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *canHandle)
 {
 	static CAN_RxPacketTypeDef packet;
     // CAN数据接收
-    if (canHandle->Instance == hcan2.Instance)
+    if (canHandle->Instance == hcan1.Instance)
     {
         if (HAL_CAN_GetRxMessage(canHandle, CAN_RX_FIFO0, &packet.hdr, packet.payload) == HAL_OK)		//获得接收到的数据头和数据
         {
