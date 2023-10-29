@@ -30,3 +30,10 @@
 2006control\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 2006control\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 2006control\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
+2006control\stm32f4xx_it.o: ../Core/Inc/bsp_can.h
+2006control\stm32f4xx_it.o: ../Core/Inc/mytype.h
+2006control\stm32f4xx_it.o: E:\Keil_MDK\ARM\ARMCC\Bin\..\include\stdlib.h
+2006control\stm32f4xx_it.o: E:\Keil_MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+2006control\stm32f4xx_it.o: E:\Keil_MDK\ARM\ARMCC\Bin\..\include\string.h
+2006control\stm32f4xx_it.o: E:\Keil_MDK\ARM\ARMCC\Bin\..\include\stdbool.h
+2006control\stm32f4xx_it.o: ../Core/Inc/can.h

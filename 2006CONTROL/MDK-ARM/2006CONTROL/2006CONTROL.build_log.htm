@@ -22,16 +22,23 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 E:\NewRM\RM-Oct-Nov\2006CONTROL\MDK-ARM\2006CONTROL.uvprojx
-Project File Date:  10/28/2023
+Project File Date:  10/29/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'E:\Keil_MDK\ARM\ARMCC\Bin'
 Build target '2006CONTROL'
-compiling bas_can.c...
+compiling main.c...
+../Core/Inc/pid.h(103): warning:  #1-D: last line of file ends without a newline
+  extern CascadePID_Typedef Motor;
+../Core/Src/main.c(27): warning:  #14-D: extra text after expected end of preprocessing directive
+  #include "bsp_can.h";
+../Core/Src/main.c(125): warning:  #223-D: function "set_Cascademoto_current" declared implicitly
+      set_Cascademoto_current(&hcan1,Motor.output);
+../Core/Src/main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=5924 RO-data=440 RW-data=48 ZI-data=1928  
+Program Size: Code=6296 RO-data=440 RW-data=52 ZI-data=2100  
 FromELF: creating hex file...
-"2006CONTROL\2006CONTROL.axf" - 0 Error(s), 0 Warning(s).
+"2006CONTROL\2006CONTROL.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

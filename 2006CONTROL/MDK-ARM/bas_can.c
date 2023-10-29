@@ -9,7 +9,8 @@ static CAN_RxHeaderTypeDef 	RXHeader;
 uint8_t TXmessage[8];
 uint8_t RXmessage[8];
 uint32_t pTxMailbox = 0;
-int flag=0;
+
+int flag1=0;
 
 
 
@@ -23,25 +24,25 @@ void get_moto_offset(moto_measure_t *ptr, uint8_t *RxMessage);
   * @Retval		None
   * @Date     2015/11/30
  *******************************************************************************************/
-void my_can_filter_init_recv_all(CAN_HandleTypeDef* hcan)
+void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan)
 {
+  CAN_FilterTypeDef  can_filter;
 
-    CAN_FilterTypeDef  can_filter;
-
-    can_filter.FilterBank = 0;                       // filter 0
-    can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // ????????
-    can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//????????32?
-    can_filter.FilterIdHigh = 0;//?????? 
-    can_filter.FilterIdLow  = 0;//?????? 
-    can_filter.FilterMaskIdHigh = 0;//?????
-    can_filter.FilterMaskIdLow  = 0;       //?????   set mask 0 to receive all can id
-    can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0,????FIFO0
-    can_filter.FilterActivation = ENABLE;           // enable can filter
-    can_filter.SlaveStartFilterBank  = 14;          
+  can_filter.FilterBank = 0;                       // filter 0
+  can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // 标识符屏蔽位模式
+  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//过滤器位宽为单个32位
+  can_filter.FilterIdHigh = 0;//标识符寄存器 
+  can_filter.FilterIdLow  = 0;//标识符寄存器 
+  can_filter.FilterMaskIdHigh = 0;//屏蔽寄存器
+  can_filter.FilterMaskIdLow  = 0;       //屏蔽寄存器   set mask 0 to receive all can id
+  can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0，接收器是FIFO0
+  can_filter.FilterActivation = ENABLE;           // enable can filter
+  can_filter.SlaveStartFilterBank  = 0;          // only meaningful in dual can mode
    
-    HAL_CAN_ConfigFilter(&hcan1, &can_filter);        // init can filter
-    HAL_CAN_ActivateNotification(&hcan1,CAN_IT_RX_FIFO0_MSG_PENDING);		//??can?FIFO0??
-    HAL_CAN_Start(&hcan1);//??can1
+  	HAL_CAN_ConfigFilter(_hcan, &can_filter);        // init can filter
+	HAL_CAN_Start(_hcan);//启动can，封装在can_user_init()里了
+	HAL_CAN_ActivateNotification(_hcan,CAN_IT_RX_FIFO0_MSG_PENDING);		//使能can的FIFO0中断，也封装在can_user_init()里了
+
 
 }
 
@@ -53,20 +54,19 @@ uint32_t FlashTimer;
   * @Retval		None 
   * @Date     2015/11/24
  *******************************************************************************************/
-void HAL_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* _hcan)
 {
-  flag=1;
+  	flag1=1;
 	if(HAL_GetTick() - FlashTimer>500)
 	{
 		FlashTimer = HAL_GetTick();	
 	}
-	HAL_CAN_GetRxMessage(&hcan1,CAN_RX_FIFO0,&RXHeader,RXmessage);
+	HAL_CAN_GetRxMessage(_hcan,CAN_RX_FIFO0,&RXHeader,RXmessage);
 	//ignore can1 or can2.
 	static u8 i;
 	i = RXHeader.StdId - CAN_2006Moto1_ID;
 	
 	get_moto_measure(&moto_chassis[i], RXmessage);
-	// __HAL_CAN_ENABLE_IT(&hcan1, CAN_IT_FMP0);
 	__HAL_CAN_ENABLE_IT(&hcan1, CAN_RX_FIFO0);
 }
 
@@ -74,7 +74,7 @@ void HAL_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 /*******************************************************************************************
   * @Func			void get_moto_measure(moto_measure_t *ptr, CAN_HandleTypeDef* hcan)
   * @Brief    ??3508????CAN??????
-  * @Param		 
+  * @Param		
   * @Retval		None
   * @Date     2015/11/24
  *******************************************************************************************/

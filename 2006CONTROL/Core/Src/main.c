@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define ABS(x)		((x>0)? x: -x) 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,7 +46,9 @@
 
 /* USER CODE BEGIN PV */
 CascadePID_Typedef Motor;
-static float set_angle=10000;
+PID_TypeDef motor_pid[4];
+int32_t set_spd = 0;
+float set_angle=10000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,11 +95,21 @@ int main(void)
   my_can_filter_init_recv_all(&hcan1);
   __HAL_CAN_ENABLE_IT(&hcan1,CAN_RX_FIFO0);
 
-  pid_init(Motor.inner);
-  pid_param_init(Motor.inner,PID_Speed,16384,5000,10,0,8000,0,1.5,0.1,0);
+  // for(int i=0; i<4; i++)
+  // {	
 
-  pid_init(Motor.outer);
-  pid_param_init(Motor.outer,PID_Speed,16384,5000,10,0,8000,0,1.5,0.1,0);
+  //   pid_init(&motor_pid[i]);
+  //   pid_param_init(&motor_pid[i],PID_Speed,16384,5000,10,0,8000,0,1.5,0.1,0);
+    
+  // }
+
+//  pid_init(Motor.inner);
+  pid_param_init(&Motor.inner,PID_Speed,16384,5000,10,0,8000,0,1.5,0.1,0);
+
+//  pid_init(Motor.outer);
+  pid_param_init(&Motor.outer,PID_Speed,16384,5000,10,0,8000,0,1.5,0.1,0);
+	
+	HAL_GPIO_TogglePin(GPIOH,GPIO_PIN_12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,11 +119,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_TogglePin(GPIOH,GPIO_PIN_12);
-		set_Cascademoto_current(&hcan1,1000);
-    Motor.outer->target=set_angle;
+    
+    Motor.outer.target=set_angle;
     PID_CascadeCalc(&Motor,moto_chassis[0].angle,moto_chassis[0].speed_rpm);
     set_Cascademoto_current(&hcan1,Motor.output);
+//		set_Cascademoto_current(&hcan1,1000);
 
   }
   /* USER CODE END 3 */
@@ -163,7 +175,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /**

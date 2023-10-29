@@ -56,30 +56,30 @@ typedef struct _PID_TypeDef
 					uint32_t lasttime;
 						uint8_t dtime;	
 	
-	void (*f_param_init)(struct _PID_TypeDef *pid,  //PID参数初始化
-				   PID_ID id,
-				   uint16_t maxOutput,
-				   uint16_t integralLimit,
-				   float deadband,
-				   uint16_t controlPeriod,
-					int16_t max_err,     
-					int16_t  target,
-				   float kp,
-				   float ki,
-				   float kd);
-				   
-	void (*f_pid_reset)(struct _PID_TypeDef *pid, float kp,float ki, float kd);		//pid三个参数修改
-	float (*f_cal_pid)(struct _PID_TypeDef *pid, float measure);   //pid计算
+//	void (*f_param_init)(struct _PID_TypeDef *pid,  //PID参数初始化
+//				   PID_ID id,
+//				   uint16_t maxOutput,
+//				   uint16_t integralLimit,
+//				   float deadband,
+//				   uint16_t controlPeriod,
+//					int16_t max_err,     
+//					int16_t  target,
+//				   float kp,
+//				   float ki,
+//				   float kd);
+//				   
+//	void (*f_pid_reset)(struct _PID_TypeDef *pid, float kp,float ki, float kd);		//pid三个参数修改
+//	float (*f_cal_pid)(struct _PID_TypeDef *pid, float measure);   //pid计算
 }PID_TypeDef;
 
 typedef struct
 {
-  PID_TypeDef* inner;
-  PID_TypeDef* outer;
+  PID_TypeDef inner;
+  PID_TypeDef outer;
   float output; //等于inner.outer
 }CascadePID_Typedef;
 
-void pid_init(PID_TypeDef* pid);
+//void pid_init(PID_TypeDef* pid);
 void PID_CascadeCalc(CascadePID_Typedef *pid,float outermeasure,float innermeasure);
 void pid_param_init(
 	PID_TypeDef * pid, 
@@ -94,6 +94,8 @@ void pid_param_init(
 	float 	kp, 
 	float 	ki, 
 	float 	kd);
+void pid_reset(PID_TypeDef * pid, float kp, float ki, float kd);
+float pid_calculate(PID_TypeDef* pid, float measure);
 #endif
 
 //extern PID_TypeDef pid_pitch;    

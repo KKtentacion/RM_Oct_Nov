@@ -496,14 +496,14 @@
           <GroupName>USER</GroupName>
           <Files>
             <File>
-              <FileName>pid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pid.c</FilePath>
-            </File>
-            <File>
               <FileName>bas_can.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\bas_can.c</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pid.c</FilePath>
             </File>
           </Files>
         </Group>

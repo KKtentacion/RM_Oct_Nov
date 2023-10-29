@@ -52,7 +52,7 @@ void pid_param_init(
 }
 
 /*中途更改参数设定--------------------------------------------------------------*/
-static void pid_reset(PID_TypeDef * pid, float kp, float ki, float kd)
+void pid_reset(PID_TypeDef * pid, float kp, float ki, float kd)
 {
 	pid->kp = kp;
 	pid->ki = ki;
@@ -62,7 +62,7 @@ static void pid_reset(PID_TypeDef * pid, float kp, float ki, float kd)
 /*pid计算-----------------------------------------------------------------------*/
 
 	
-static float pid_calculate(PID_TypeDef* pid, float measure)//, int16_t target)
+float pid_calculate(PID_TypeDef* pid, float measure)//, int16_t target)
 {
 //	uint32_t time,lasttime;
 	
@@ -113,17 +113,17 @@ static float pid_calculate(PID_TypeDef* pid, float measure)//, int16_t target)
 }
 
 /*pid结构体初始化，每一个pid参数需要调用一次-----------------------------------------------------*/
-void pid_init(PID_TypeDef* pid)
-{
-	pid->f_param_init = pid_param_init;
-	pid->f_pid_reset = pid_reset;
-	pid->f_cal_pid = pid_calculate;
-}
+//void pid_init(PID_TypeDef* pid)
+//{
+//	pid->f_param_init = pid_param_init;
+//	pid->f_pid_reset = pid_reset;
+//	pid->f_cal_pid = pid_calculate;
+//}
 
 void PID_CascadeCalc(CascadePID_Typedef *pid,float outermeasure,float innermeasure)
 {
-    pid->outer->output=pid_calculate(pid->outer,outermeasure);
-	pid->inner->target=pid->outer->output;
-	pid->inner->output=pid_calculate(pid->inner,innermeasure);
-	pid->output=pid->inner->output;
+    pid->outer.output=pid_calculate(&pid->outer,outermeasure);
+	pid->inner.target=pid->outer.output;
+	pid->inner.output=pid_calculate(&pid->inner,innermeasure);
+	pid->output=pid->inner.output;
 }
